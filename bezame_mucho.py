@@ -1,7 +1,11 @@
+"""This needs to be run in RF and only works if DB module is installed"""
+
 from vanilla import *
 from drawBot import *
 from drawBot.ui.drawView import DrawView
 from _lib.Shapes import Shapes
+from robofab.interface.all.dialogs import Message
+import os
 
 C1 = (25, 250)
 C4 = (475, 250)
@@ -27,76 +31,72 @@ class BezierPreview(object):
     def buildUI(self):
         minX = C1[0]
         maxX = C4[0]
-
         minY = 25
         maxY = PAGESIZE - 25
+        col1 = 10
+        col2 = 275
+        col3 = 535
+        row = 760
 
-        row = 10
+        self.w = Window((750, 945), "Bezame Mucho")
 
-        self.w = Window((1000, 800), "Bez Aldrin")
-
-        self.w.p2xText = TextBox((10, row, 100, 17),
+        self.w.p2xText = TextBox((col1, row, 100, 17),
                                  "Off-Curve 1 x:")
 
-        self.w.p2xSlider = Slider((10, row + 17, 200, 20),
+        self.w.p2xSlider = Slider((col1, row + 17, 200, 20),
                                   minValue=minX,
                                   maxValue=maxX,
                                   value=self.p2x,
                                   callback=self.p2xSliderCallback)
 
+        self.w.kText = TextBox((col2, row, 100, 17),
+                               "Point Position")
+        self.w.kSlider = Slider((col2, row + 17, 200, 20),
+                                minValue=0,
+                                maxValue=1,
+                                value=self.k,
+                                callback=self.kSliderCallback)                                  
+
+        self.w.p3xText = TextBox((col3, row, 100, 17),
+                                 "Off-Curve 2 x:")
+        self.w.p3xSlider = Slider((col3, row + 17, 200, 20),
+                                  minValue=minX,
+                                  maxValue=maxX,
+                                  value=self.p3x,
+                                  callback=self.p3xSliderCallback)                                  
+
         row += 45
-        self.w.p2yText = TextBox((10, row, 100, 17),
+        self.w.p2yText = TextBox((col1, row, 100, 17),
                                  "Off-Curve 1 y:")
 
-        self.w.p2ySlider = Slider((10, row + 17, 200, 20),
+        self.w.p2ySlider = Slider((col1, row + 17, 200, 20),
                                   minValue=minY,
                                   maxValue=maxY,
                                   value=self.p2y,
                                   callback=self.p2ySliderCallback)
 
-        row += 90
-        self.w.p3xText = TextBox((10, row, 100, 17),
-                                 "Off-Curve 2 x:")
-        self.w.p3xSlider = Slider((10, row + 17, 200, 20),
-                                  minValue=minX,
-                                  maxValue=maxX,
-                                  value=self.p3x,
-                                  callback=self.p3xSliderCallback)
+        self.w.draw1stCheck = CheckBox((col2, row, 200, 22),
+                                       "Draw 1st Interpolation",
+                                       callback=self.draw1stCheckCallback)
 
-        row += 45
-        self.w.p3yText = TextBox((10, row, 100, 17),
+        self.w.draw2ndCheck = CheckBox((col2, row+25, 200, 22),
+                                       "Draw 2nd Interpolation",
+                                       callback=self.draw2ndCheckCallback)
+
+        self.w.p3yText = TextBox((col3, row, 100, 17),
                                  "Off-Curve 2 y:")
-        self.w.p3ySlider = Slider((10, row + 17, 200, 20),
+        self.w.p3ySlider = Slider((col3, row + 17, 200, 20),
                                   minValue=minY,
                                   maxValue=maxY,
                                   value=self.p3y,
                                   callback=self.p3ySliderCallback)
 
-        row += 90
-        self.w.kText = TextBox((10, row, 100, 17),
-                               "Point Position")
-        self.w.kSlider = Slider((10, row + 17, 200, 20),
-                                minValue=0,
-                                maxValue=1,
-                                value=self.k,
-                                callback=self.kSliderCallback)
-
-        row += 90
-        self.w.draw1stCheck = CheckBox((10, row, 200, 22),
-                                       "Draw 1st Interpolation",
-                                       callback=self.draw1stCheckCallback)
-
-        row += 25
-        self.w.draw2ndCheck = CheckBox((10, row, 200, 22),
-                                       "Draw 2nd Interpolation",
-                                       callback=self.draw2ndCheckCallback)
-
-        row += 140
-        self.w.generateButton = SquareButton((10, row, 200, 80),
+        row += 65
+        self.w.generateButton = SquareButton((col1, row, -10, -10),
                                              "Animate",
                                              callback=self.animateDrawing)
 
-        self.w.canvas = DrawView((220, 10, -10, -10))
+        self.w.canvas = DrawView((10, 10, -10, 735))
 
         self.drawCanvas()
         self.w.open()
@@ -254,8 +254,12 @@ class BezierPreview(object):
 
             self.drawPointAtK((animatePointsList[5][0], animatePointsList[5][1]))
 
-        saveImage("~/Desktop/bez_aldrin.gif")
+        saveImage(os.path.dirname(os.path.realpath(__file__)) + "/_gifs/bezame_mucho.gif")
         
 shapes = Shapes()
 
-BezierPreview()
+try:
+    BezierPreview()
+    
+except NameError:
+    Message("Missing some sort of module... ")
