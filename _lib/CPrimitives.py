@@ -34,7 +34,7 @@ class CRect(CPrimitives):
     square1.draw(20, 60)  -->  Draws square1 with centerpoint 20, 60
     """
     def __init__(self, width, height=None):
-        CPrimitives.__init__(self)
+        super(CRect, self).__init__(self)
         if height is None:
             height = width
 
@@ -98,7 +98,7 @@ class COval(CPrimitives):
     circle1.draw(20, 80)  -->  Draws circle1 with centerpoint (20, 80)
     """
     def __init__(self, width, height=None):
-        CPrimitives.__init__(self)
+        super(COval, self).__init__(self)
         if height is None:
             height = width
 
@@ -149,6 +149,24 @@ class COval(CPrimitives):
         """
         oval(x - self.width / 2, y - self.height / 2, self.width, self.height)
 
+class CTriangle(CPrimitives):
+    """
+    CTriangle object. Base arguments are: (width, height)
+    If height isn't specified, height = width (ie. the object is an equilateral triangle).
+
+    Use draw(px, py) method to draw the object:
+
+    triangle1 = CTriangle(100)  -->  Instantiates the object as triangle1
+
+    triangle1.draw(20, 60)  -->  Draws triangle1 with centerpoint 20, 60
+    """
+    def __init__(self, width, height=None):
+        super(CTriangle, self).__init__(self)
+        if height is None:
+            height = width
+
+        self.width = width
+        self.height = height
 
 # Old drawTriangle below. Need to figure out more precise method (using centroid).
 
