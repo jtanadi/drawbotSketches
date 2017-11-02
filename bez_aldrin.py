@@ -3,7 +3,7 @@
 from vanilla import *
 from drawBot import *
 from drawBot.ui.drawView import DrawView
-from _lib.Shapes import Shapes
+from _lib.drawShapes import *
 from robofab.interface.all.dialogs import Message
 import os
 
@@ -38,7 +38,7 @@ class BezierPreview(object):
         col3 = 535
         row = 760
 
-        self.w = Window((750, 945), "Bezame Mucho")
+        self.w = Window((750, 945), "Bez Aldrin")
 
         self.w.p2xText = TextBox((col1, row, 100, 17),
                                  "Off-Curve 1 x:")
@@ -98,6 +98,10 @@ class BezierPreview(object):
 
         self.w.canvas = DrawView((10, 10, -10, 735))
 
+        # newDrawing()
+        # newPage(PAGESIZE, PAGESIZE)
+        
+
         self.drawCanvas()
         self.w.open()
 
@@ -132,8 +136,6 @@ class BezierPreview(object):
     def drawCanvas(self):
         newDrawing()
         newPage(PAGESIZE, PAGESIZE)
-        fill(1)
-        rect(0, 0, PAGESIZE, PAGESIZE)
 
         self.pointsList = self.findPoints(C1, (self.p2x, self.p2y),
                                           (self.p3x, self.p3y), C4, self.k)
@@ -164,8 +166,8 @@ class BezierPreview(object):
 
         fill(0, 1, 0, 1)
         stroke(None)
-        rect(C1[0]-RECTSIZE/2, C1[1]-RECTSIZE/2, RECTSIZE, RECTSIZE)
-        rect(C4[0]-RECTSIZE/2, C4[1]-RECTSIZE/2, RECTSIZE, RECTSIZE)
+        cRect(C1[0], C1[1], RECTSIZE)
+        cRect(C4[0], C4[1], RECTSIZE)
 
     def drawOffCurvePoints(self):
         stroke(0, 0, 0, 0.5)
@@ -175,8 +177,8 @@ class BezierPreview(object):
         line((self.p2x, self.p2y), (self.p3x, self.p3y))
 
         stroke(None)
-        shapes.drawTriangle(self.p2x, self.p2y, RECTSIZE)
-        shapes.drawTriangle(self.p3x, self.p3y, RECTSIZE)
+        cTriangle(self.p2x, self.p2y, RECTSIZE)
+        cTriangle(self.p3x, self.p3y, RECTSIZE)
 
     def draw1stInterpolation(self, (ax, ay), (bx, by), (cx, cy)):
         fill(None)
@@ -187,9 +189,9 @@ class BezierPreview(object):
 
         fill(0, 0, 1, 1)
         stroke(None)
-        shapes.drawCircle(ax, ay, CIRCSIZESMALL)
-        shapes.drawCircle(bx, by, CIRCSIZESMALL)
-        shapes.drawCircle(cx, cy, CIRCSIZESMALL)
+        cOval(ax, ay, CIRCSIZESMALL)
+        cOval(bx, by, CIRCSIZESMALL)
+        cOval(cx, cy, CIRCSIZESMALL)
 
     def draw2ndInterpolation(self, (dx, dy), (ex, ey)):
         fill(None)
@@ -198,14 +200,14 @@ class BezierPreview(object):
 
         fill(0, 1, 0, 1)
         stroke(None)
-        shapes.drawCircle(dx, dy, CIRCSIZESMALL)
-        shapes.drawCircle(ex, ey, CIRCSIZESMALL)
+        cOval(dx, dy, CIRCSIZESMALL)
+        cOval(ex, ey, CIRCSIZESMALL)
 
     def drawPointAtK(self, (fx, fy)):
         fill(1, 0, 0, 1)
         stroke(None)
 
-        shapes.drawCircle(fx, fy, CIRCSIZE)
+        cOval(fx, fy, CIRCSIZE)
 
     def findPoints(self, p1, p2, p3, p4, k):
         ax = p1[0] + k * (p2[0] - p1[0])
@@ -254,9 +256,7 @@ class BezierPreview(object):
 
             self.drawPointAtK((animatePointsList[5][0], animatePointsList[5][1]))
 
-        saveImage(os.path.dirname(os.path.realpath(__file__)) + "/_gifs/bezame_mucho.gif")
-        
-shapes = Shapes()
+        saveImage(os.path.dirname(os.path.realpath(__file__)) + "/_gifs/bez_aldrin.gif")
 
 try:
     BezierPreview()
