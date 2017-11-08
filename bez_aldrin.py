@@ -98,10 +98,6 @@ class BezierPreview(object):
 
         self.w.canvas = DrawView((10, 10, -10, 735))
 
-        # newDrawing()
-        # newPage(PAGESIZE, PAGESIZE)
-        
-
         self.drawCanvas()
         self.w.open()
 
@@ -140,8 +136,9 @@ class BezierPreview(object):
         self.pointsList = self.findPoints(C1, (self.p2x, self.p2y),
                                           (self.p3x, self.p3y), C4, self.k)
 
+        self.drawCurve((self.pointsList[5][0], self.pointsList[5][1]))
         self.drawOffCurvePoints()
-        self.drawCurve()
+        self.drawOnCurvePoints()
 
         if self.draw1st == 1:
             self.draw1stInterpolation((self.pointsList[0][0], self.pointsList[0][1]),
@@ -155,7 +152,11 @@ class BezierPreview(object):
         self.drawPointAtK((self.pointsList[5][0], self.pointsList[5][1]))
         self.w.canvas.setPDFDocument(pdfImage())
 
-    def drawCurve(self):
+    def drawCurve(self, (fx, fy)):
+        save()
+
+        self.drawClippingMask((fx, fy))
+
         fill(None)
         stroke(0)
         lineDash(None)
@@ -163,7 +164,9 @@ class BezierPreview(object):
         moveTo(C1)
         curveTo((self.p2x, self.p2y), (self.p3x, self.p3y), C4)
         drawPath()
+        restore()
 
+    def drawOnCurvePoints(self):
         fill(0, 1, 0, 1)
         stroke(None)
         cRect(C1[0], C1[1], RECTSIZE)
@@ -179,6 +182,16 @@ class BezierPreview(object):
         stroke(None)
         cTriangle(self.p2x, self.p2y, RECTSIZE)
         cTriangle(self.p3x, self.p3y, RECTSIZE)
+
+    def drawClippingMask(self, (fx, fy)):
+        clip = BezierPath()
+
+        clip.moveTo((fx, fy + PAGESIZE / 2))
+        clip.lineTo((fx, fy - PAGESIZE / 2))
+        clip.lineTo((0, fy - PAGESIZE / 2))
+        clip.lineTo((0, fy + PAGESIZE / 2))
+        clip.closePath()
+        clipPath(clip)
 
     def draw1stInterpolation(self, (ax, ay), (bx, by), (cx, cy)):
         fill(None)
@@ -242,8 +255,9 @@ class BezierPreview(object):
             animatePointsList = self.findPoints(C1, (self.p2x, self.p2y),
                                                 (self.p3x, self.p3y), C4, k)
 
+            self.drawCurve((animatePointsList[5][0], animatePointsList[5][1]))
             self.drawOffCurvePoints()
-            self.drawCurve()
+            self.drawOnCurvePoints()
 
             if self.draw1st == 1:
                 self.draw1stInterpolation((animatePointsList[0][0], animatePointsList[0][1]),
@@ -262,4 +276,4 @@ try:
     BezierPreview()
     
 except NameError:
-    Message("Missing some sort of module... ")
+    Message("Missing some sort of module...")
