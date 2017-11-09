@@ -19,13 +19,13 @@ def drawSlash(x, y):
     else:
         for i in range(3):
             if i == 0:
-                fill(249/255, 115/255, 45/255, 1)
-
-            elif i == 1:
                 fill(79/255, 197/255, 150/255, 1)
 
-            else:
+            elif i == 1:
                 fill(58/255, 102/255, 179/255, 1)
+
+            else:
+                fill(249/255, 115/255, 45/255, 1)
 
             rect(x + SQUARE * i / 3, y, SQUARE / 3, SQUARE)
 
