@@ -8,7 +8,6 @@ def drawSlash(x, y):
     else:
         line((x, y + SQUARE), (x + SQUARE, y))
 
-
 for frame in range(FRAMES):
     newPage(PAGESIZE, PAGESIZE)
     frameDuration(1/5)
