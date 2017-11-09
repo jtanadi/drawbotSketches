@@ -13,8 +13,6 @@ for frame in range(FRAMES):
     newPage(PAGESIZE, PAGESIZE)
     frameDuration(1/5)
 
-    r = frame / FRAMES
-
     fill(0)
     rect(0, 0, PAGESIZE, PAGESIZE)
 
