@@ -1,3 +1,6 @@
+# Add import to use drawBot as module outside of the app
+from drawBot import *
+
 C1 = (50, 100)
 C2 = (150, 400)
 C3 = (350, 400)
@@ -39,7 +42,7 @@ def drawTriangle(C, size):
 
 for frame in range(FRAMES):
     t = sin(pi * frame/FRAMES)
-    print t
+    # print t
 
     newPage(PAGESIZE, PAGESIZE)
     fill(0, 0, 0, 1)
@@ -74,4 +77,4 @@ for frame in range(FRAMES):
     drawTriangle(C2, RECTSIZE)
     drawTriangle(C3, RECTSIZE)
   
-saveImage("bezier_animation1.gif")
+saveImage("_gifs/bezier_animation1.gif")
